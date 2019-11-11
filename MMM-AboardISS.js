@@ -7,7 +7,7 @@
  * {{LICENSE}} Licensed.
  */
 
-Module.register("{{MODULE_NAME}}", {
+Module.register("MMM-AboardISS", {
 	defaults: {
 		updateInterval: 60000,
 		retryDelay: 5000
@@ -64,7 +64,6 @@ Module.register("{{MODULE_NAME}}", {
 		};
 		dataRequest.send();
 	},
-
 
 	/* scheduleUpdate()
 	 * Schedule next update.
@@ -143,12 +142,12 @@ Module.register("{{MODULE_NAME}}", {
 
 		// the data if load
 		// send notification to helper
-		this.sendSocketNotification("{{MODULE_NAME}}-NOTIFICATION_TEST", data);
+		this.sendSocketNotification("MMM-AboardISS-LOAD_DATA", data);
 	},
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		if(notification === "{{MODULE_NAME}}-NOTIFICATION_TEST") {
+		if(notification === "MMM-AboardISS-LOAD_DATA") {
 			// set dataNotification
 			this.dataNotification = payload;
 			this.updateDom();
