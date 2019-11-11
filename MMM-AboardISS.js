@@ -1,7 +1,7 @@
 /* global Module */
 
 /* Magic Mirror
- * Module: {{MODULE_NAME}}
+ * Module: MMM-AboardISS
  *
  * By {{AUTHOR_NAME}}
  * {{LICENSE}} Licensed.
@@ -9,61 +9,30 @@
 
 Module.register("MMM-AboardISS", {
 	defaults: {
-		updateInterval: 60000,
-		retryDelay: 5000
+		updateInterval: 60000
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
 
+	/**
+	 * Start function - fires off when module first loads
+	 */
 	start: function() {
 		var self = this;
-		var dataRequest = null;
-		var dataNotification = null;
-
-		//Flag for check if module is loaded
-		this.loaded = false;
-
+		console.log("Starting");
+		console.log(this);
+		let req = this.sendSocketNotification("MMM-AboardISS-DATA_REQUEST");
+		let data = "Hello";
+		this.sendSocketNotification("ISS-NOTIFICATION_TEST", data);
+		this.sendSocketNotification("MMM-AboardISS-DATA_REQUEST");
+		console.log(req);
 		// Schedule update timer.
-		this.getData();
 		setInterval(function() {
 			self.updateDom();
 		}, this.config.updateInterval);
 	},
 
-	/*
-	 * getData
-	 * function example return data and show it in the module wrapper
-	 * get a URL request
-	 *
-	 */
-	getData: function() {
-		var self = this;
-
-		var urlApi = "https://jsonplaceholder.typicode.com/posts/1";
-		var retry = true;
-
-		var dataRequest = new XMLHttpRequest();
-		dataRequest.open("GET", urlApi, true);
-		dataRequest.onreadystatechange = function() {
-			console.log(this.readyState);
-			if (this.readyState === 4) {
-				console.log(this.status);
-				if (this.status === 200) {
-					self.processData(JSON.parse(this.response));
-				} else if (this.status === 401) {
-					self.updateDom(self.config.animationSpeed);
-					Log.error(self.name, this.status);
-					retry = false;
-				} else {
-					Log.error(self.name, "Could not load data.");
-				}
-				if (retry) {
-					self.scheduleUpdate((self.loaded) ? -1 : self.config.retryDelay);
-				}
-			}
-		};
-		dataRequest.send();
-	},
+	// TODO - Refactor this to include anonymous functions and better conventions
 
 	/* scheduleUpdate()
 	 * Schedule next update.
@@ -79,13 +48,12 @@ Module.register("MMM-AboardISS", {
 		nextLoad = nextLoad ;
 		var self = this;
 		setTimeout(function() {
-			self.getData();
+			self.dataRequest = this.sendSocketNotification("MMM-AboardISS-DATA_REQUEST");
 		}, nextLoad);
 	},
 
 	getDom: function() {
 		var self = this;
-
 		// create element wrapper for show into the module
 		var wrapper = document.createElement("div");
 		// If this.dataRequest is not empty
@@ -98,7 +66,6 @@ Module.register("MMM-AboardISS", {
 			// Use translate function
 			//             this id defined in translations files
 			labelDataRequest.innerHTML = this.translate("TITLE");
-
 
 			wrapper.appendChild(labelDataRequest);
 			wrapper.appendChild(wrapperDataRequest);
@@ -121,7 +88,7 @@ Module.register("MMM-AboardISS", {
 
 	getStyles: function () {
 		return [
-			"{{MODULE_NAME}}.css",
+			"MMM-AboardISS.css",
 		];
 	},
 
@@ -134,23 +101,13 @@ Module.register("MMM-AboardISS", {
 		};
 	},
 
-	processData: function(data) {
-		var self = this;
-		this.dataRequest = data;
-		if (this.loaded === false) { self.updateDom(self.config.animationSpeed) ; }
-		this.loaded = true;
-
-		// the data if load
-		// send notification to helper
-		this.sendSocketNotification("MMM-AboardISS-LOAD_DATA", data);
-	},
-
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		if(notification === "MMM-AboardISS-LOAD_DATA") {
+		if(notification === "MMM-AboardISS-DATA_RESPONSE") {
+			console.log(payload);
 			// set dataNotification
 			this.dataNotification = payload;
-			this.updateDom();
+			// this.updateDom();
 		}
 	},
 });

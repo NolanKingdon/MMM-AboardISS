@@ -1,5 +1,5 @@
 /* Magic Mirror
- * Node Helper: {{MODULE_NAME}}
+ * Node Helper: MMM-AboardISS
  *
  * By {{AUTHOR_NAME}}
  * {{LICENSE}} Licensed.
@@ -18,20 +18,15 @@ module.exports = NodeHelper.create({
 	 * argument payload mixed - The payload of the notification.
 	 */
 	socketNotificationReceived: function(notification, payload) {
-		if (notification === "MMM-AboardISS-LOAD_DATA") {
+		if (notification === "ISS-NOTIFICATION_TEST") {
 			console.log("Working notification system. Notification:", notification, "payload: ", payload);
 			// Send notification
-			this.sendNotificationTest(this.anotherFunction()); //Is possible send objects :)
+			this.sendData("Hey"); //Is possible send objects :)
 		}
 	},
 
 	// Example function send notification test
-	sendNotificationTest: function(payload) {
-		this.sendSocketNotification("MMM-AboardISS-LOAD_DATA", payload);
-	},
-
-	// Test another function
-	anotherFunction: function() {
-		return {date: new Date()};
+	sendData: function(payload) {
+		this.sendSocketNotification("MMM-AboardISS-DATA_RESPONSE", payload);
 	}
 });
