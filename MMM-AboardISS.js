@@ -9,7 +9,7 @@
 
 Module.register("MMM-AboardISS", {
 	defaults: {
-		updateInterval: 60000
+		updateInterval: 86400000
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -59,22 +59,21 @@ Module.register("MMM-AboardISS", {
 
 		// If we have a successful data load from the helper:
 		if(this.listItems !== null){
-			wrapper.innerHTML = `
-				<div class="ISS-List">
-					${this.listItems.map((item)=>{
-						return `
-							<div class="ISS-List-Item>
-								<p class="ISS-Name">${item.person.title}, ${item.person.name}</p>
-								<img src="${item.person.countryflag}">
-								<p class="ISS-days-in-space">${item.spaceDays}</p>
-								<p class="ISS-twitter">${item.handle}</p>
-							</div>
-						`;
-					})}
-				</div>
-			`;
+			let content = "<div class='ISS-List'>";
+			this.listItems.forEach( item => {
+				let title = `<p>${item.person.title}, ${item.person.name}</p>`;
+				let img = `<img src="${item.person.countryflag}">`;
+				let days = `<p class="ISS-days-in-space">${item.spaceDays}</p>`;
+				let handle = `<p class="ISS-twitter">${item.handle}</p>`;
+				let container = `<div class="ISS-List-Item">
+				${title}${img}${days}${handle}
+				</div>`;
+				content += container;
+			});
+			
+			wrapper.innerHTML = content;
 		} else {
-			wrapper.innerHTML = `<p>Loading...</p>`;
+			wrapper.innerHTML = "<p>Loading...</p>";
 		}
 
 		return wrapper;
