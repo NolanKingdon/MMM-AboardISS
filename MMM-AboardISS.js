@@ -3,8 +3,8 @@
 /* Magic Mirror
  * Module: MMM-AboardISS
  *
- * By {{AUTHOR_NAME}}
- * {{LICENSE}} Licensed.
+ * By Nolan Kingdon
+ * MIT Licensed.
  */
 
 Module.register("MMM-AboardISS", {
@@ -18,20 +18,20 @@ Module.register("MMM-AboardISS", {
 	 * Start function - fires off when module first loads
 	 */
 	start: function() {
+		// Scoping this
 		var self = this;
-		console.log("Starting");
-		console.log(this);
-		let req = this.sendSocketNotification("MMM-AboardISS-DATA_REQUEST");
-		let data = "Hello";
-		this.sendSocketNotification("ISS-NOTIFICATION_TEST", data);
-		this.sendSocketNotification("MMM-AboardISS-DATA_REQUEST");
-		console.log(req);
+		// Adding placeholders for data to display in the future
+		this.listItems = null;
+		this.sendSocketNotification("ISS-DATA_REQUEST");
 		// Schedule update timer.
 		setInterval(function() {
 			self.updateDom();
 		}, this.config.updateInterval);
 	},
 
+	buildTemplate: function(args = {}){
+
+	},
 	// TODO - Refactor this to include anonymous functions and better conventions
 
 	/* scheduleUpdate()
@@ -48,7 +48,7 @@ Module.register("MMM-AboardISS", {
 		nextLoad = nextLoad ;
 		var self = this;
 		setTimeout(function() {
-			self.dataRequest = this.sendSocketNotification("MMM-AboardISS-DATA_REQUEST");
+			self.dataRequest = this.sendSocketNotification("ISS-DATA_REQUEST");
 		}, nextLoad);
 	},
 
@@ -56,29 +56,27 @@ Module.register("MMM-AboardISS", {
 		var self = this;
 		// create element wrapper for show into the module
 		var wrapper = document.createElement("div");
-		// If this.dataRequest is not empty
-		if (this.dataRequest) {
-			var wrapperDataRequest = document.createElement("div");
-			// check format https://jsonplaceholder.typicode.com/posts/1
-			wrapperDataRequest.innerHTML = this.dataRequest.title;
 
-			var labelDataRequest = document.createElement("label");
-			// Use translate function
-			//             this id defined in translations files
-			labelDataRequest.innerHTML = this.translate("TITLE");
-
-			wrapper.appendChild(labelDataRequest);
-			wrapper.appendChild(wrapperDataRequest);
+		// If we have a successful data load from the helper:
+		if(this.listItems !== null){
+			wrapper.innerHTML = `
+				<div class="ISS-List">
+					${this.listItems.map((item)=>{
+						return `
+							<div class="ISS-List-Item>
+								<p class="ISS-Name">${item.person.title}, ${item.person.name}</p>
+								<img src="${item.person.countryflag}">
+								<p class="ISS-days-in-space">${item.spaceDays}</p>
+								<p class="ISS-twitter">${item.handle}</p>
+							</div>
+						`;
+					})}
+				</div>
+			`;
+		} else {
+			wrapper.innerHTML = `<p>Loading...</p>`;
 		}
 
-		// Data from helper
-		if (this.dataNotification) {
-			var wrapperDataNotification = document.createElement("div");
-			// translations  + datanotification
-			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date;
-
-			wrapper.appendChild(wrapperDataNotification);
-		}
 		return wrapper;
 	},
 
@@ -103,11 +101,11 @@ Module.register("MMM-AboardISS", {
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		if(notification === "MMM-AboardISS-DATA_RESPONSE") {
-			console.log(payload);
+		if(notification === "ISS-DATA_RESPONSE") {
+			payload.forEach(person => console.log(person));
 			// set dataNotification
-			this.dataNotification = payload;
-			// this.updateDom();
+			this.listItems = payload;
+			this.updateDom();
 		}
 	},
 });
