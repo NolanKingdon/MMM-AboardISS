@@ -59,19 +59,19 @@ Module.register("MMM-AboardISS", {
 
 		// If we have a successful data load from the helper:
 		if(this.listItems !== null){
-			let content = "<div class='ISS-List'>";
+			let content = "<div class='ISS-List'><div id='ISS-header'><p>Days</p><p>Person</p><p>Flag</p></div>";
 			this.listItems.forEach( item => {
-				let title = `<p>${item.person.title}, ${item.person.name}</p>`;
+				let title = `<p>${item.person.name}</p>`;
+				let handle = (item.handle !== "No Twitter Account" ? `<p class="ISS-twitter">${item.handle}</p>` : "");
+				let nameInfo = `<div class="ISS-name-info">${title}${handle}</div>`;
 				let img = `<img src="${item.person.countryflag}">`;
 				let days = `<p class="ISS-days-in-space">${item.spaceDays}</p>`;
-				let handle = `<p class="ISS-twitter">${item.handle}</p>`;
 				let container = `<div class="ISS-List-Item">
-				${title}${img}${days}${handle}
+				${days}${nameInfo}${img}
 				</div>`;
 				content += container;
 			});
-			
-			wrapper.innerHTML = content;
+			wrapper.innerHTML = "<h4>People in Space</h4>" + content;
 		} else {
 			wrapper.innerHTML = "<p>Loading...</p>";
 		}
