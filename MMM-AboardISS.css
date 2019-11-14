@@ -5,22 +5,45 @@
  * MIT Licensed.
  */
 
+.ISS-List * {
+    line-height: 12pt;
+    padding: 0px;
+    margin: 0px;
+}
+
 .ISS-List {
     font-size: 10pt;
-    padding: 0;
-    margin: 0;
+    width: 200px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#ISS-header {
+    font-weight: 600;
+}
+
+.ISS-List-Item {
+    margin: 5px 0px 0px 0px;
 }
 
 .ISS-List div {
      display: flex;
      flex-direction: row;
+     justify-content: space-between;
+     align-items: center;
  }
 
- .ISS-List img {
-     height: 20px;
-     width: auto;
- }
+.ISS-List .ISS-name-info {
+    display: flex;
+    flex-direction: column;
+}
 
- .ISS-List-Item p {
-     font-size: 10pt;
- }
+.ISS-days-in-space {
+    font-weight: 800;
+}
+
+.ISS-List img {
+    border: 1px solid white;
+    height: auto;
+    width: auto;
+}
