@@ -1,35 +1,34 @@
-# MagicMirror-Module-Template
-This is a module to help developers to start building their own modules for the [MagicMirror](https://github.com/MichMich/MagicMirror). 
+## MMM-AboardISS
 
-There samples of code for:
-- External request
-- Config parameters
-- Custom URL path route
-- Passing of messages (NOTIFICATIONS)
+Currently a work in progress! Feel free to contribute
 
-Also this module include tasks for checking your code. For that you need install the developer dependencies.
+This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror/).
+
+Checks the current status of people on board the ISS (International Space Station), and returns their amount of time in space.
+
+
+## Using the module
+
+To install this module, navigate into `~/MagicMirror/modules` and type the following commands:
+```
+git clone https://github.com/NolanKingdon/MMM-AboardISS
+cd MMM-AboardISS
+npm install
 
 ```
-cd MI_MODULE_PATH && npm install 
+
+To use this module, add the following configuration block to the modules array in the `config/config.js` file:
+
+```js
+var config = {
+    modules: [
+        {
+			module: "MMM-AboardISS",
+			position: "top_center",
+			config: {
+				// Soon!
+			}
+		},
+    ]
+}
 ```
-
-Run the `test` npm script
-```
-npm test
-```
-
-Current Tests:
-- [ESLint](http://eslint.org/) for linting the javascript
-- [stylelint](https://stylelint.io/) for linting the CSS with [stylelint-config-standard](https://github.com/stylelint/stylelint-config-standard) as its base
-- [jsonlint](https://github.com/zaach/jsonlint) for linting the translation files
-- [markdownlint](https://github.com/DavidAnson/markdownlint) for checking the markdown files (`README.md`, `CHANGELOG.md`, `LICENSE.txt`)
-- [js-yaml](https://github.com/nodeca/js-yaml) to lint the `.travis.yml` (run through [grunt-yamllint](https://github.com/geedew/grunt-yamllint))
-
-
-## Installation
-
-`bash -c "$(curl -sL https://raw.githubusercontent.com/roramirez/MagicMirror-Module-Template/master/create_module.sh)"`
-
-This creates a module example to start your developement.
-
-If you have any suggest, please let me know [by an issue](https://github.com/roramirez/MagicMirror-Module-Template/issues/new).
